@@ -1,0 +1,8 @@
+project: Maximilian
+target: fuzz-Maximilian
+testsuite:
+    - file://mayhem/testsuite
+
+cmds:
+  - cmd: /Maximilian_fuzz
+    libfuzzer: true
