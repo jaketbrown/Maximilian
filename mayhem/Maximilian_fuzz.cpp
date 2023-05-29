@@ -15,8 +15,19 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     FuzzedDataProvider provider(data, size);
     int bitDepth = provider.ConsumeIntegralInRange(1, 24);
     int sampleRate = provider.ConsumeIntegralInRange(44100, 48000);
-
     std::vector<uint8_t> audio_data = provider.ConsumeRemainingBytes<uint8_t>();
+    if (audio_data.size() < 12) {
+        return 0;
+    }
+
+    // Prepend a valid header the target is expecting
+    std::string header = "RIFF";
+    // Convert the string to a vector of uint8_t
+    std::vector<uint8_t> strVec(header.begin(), header.end());
+
+    // Prepend the string vector to the original vector
+    audio_data.insert(audio_data.begin(), strVec.begin(), strVec.end());
+
     // Create an instance of Maximilian
     maxiSample sample;
 
@@ -27,8 +38,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
         double convertedValue = static_cast<double>(value);
         double_audio_data.push_back(convertedValue);
     }
-    sample.setSampleAndRate(double_audio_data, sampleRate);
 
+    sample.setSampleAndRate(double_audio_data, sampleRate);
+    sample.playOnce();
+    sample.trigger();
 
 
     return 0;
