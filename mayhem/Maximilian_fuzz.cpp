@@ -49,7 +49,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     sample.trigger();
     sample.setSample(double_audio_data);
     const bool enable = true;
-    #sample.loopRecord(newSample, enable, enable, start, end);
+    //sample.loopRecord(newSample, enable, enable, start, end);
     sample.setPosition(onOff);
     sample.normalise(onOff);
     sample.play4(freq, start, end);
