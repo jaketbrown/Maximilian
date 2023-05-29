@@ -13,11 +13,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
     // Get the bytes into a vector<uint8_t>
     FuzzedDataProvider provider(data, size);
-    double onOff = provider.ConsumeDoubleInRange(0.0, 1.0);
-    double newSample = provider.ConsumeDoubleInRange(0.0, 10.0);
-    double start = provider.ConsumeDoubleInRange(1.0, 10.0);
-    double end = provider.ConsumeDoubleInRange(10.0, 20.0);
-    double freq = provider.ConsumeDbouleInRange(44100.0, 48000.0);
+    double onOff = provider.ConsumeIntegralInRange(0, 1);
+    double newSample = provider.ConsumeIntegralInRange(0, 10);
+    double start = provider.ConsumeIntegralInRange(1, 10);
+    double end = provider.ConsumeIntegralInRange(10, 20);
+    double freq = provider.ConsumeIntegralInRange(44100, 48000);
     int bitDepth = provider.ConsumeIntegralInRange(1, 24);
     int sampleRate = provider.ConsumeIntegralInRange(44100, 48000);
     std::vector<uint8_t> audio_data = provider.ConsumeRemainingBytes<uint8_t>();
@@ -49,8 +49,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     sample.trigger();
     sample.setSample(double_audio_data);
     const bool enable = true;
-    sample.loopRecord(val, enable, start, end);
-    sameple.setPosition(onOff);
+    sample.loopRecord(newSample, enable, enable, start, end);
+    sample.setPosition(onOff);
     sample.normalise(onOff);
     sample.play4(freq, start, end);
 
